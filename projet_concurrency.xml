@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+chan req_AS, res_AS;
+chan req_TGS, res_TGS;
+chan req_SERV,res_SERV;
+bool clientHasTicket = false;</declaration>
+	<template>
+		<name x="5" y="5">Template</name>
+		<declaration>// Place local declarations here.
+</declaration>
+		<location id="id0" x="0" y="0">
+		</location>
+		<init ref="id0"/>
+	</template>
+	<template>
+		<name>Server</name>
+		<location id="id1" x="0" y="0">
+			<name x="-10" y="-34">Idle</name>
+		</location>
+		<location id="id2" x="-127" y="-127">
+			<name x="-137" y="-161">ReceiveRequest</name>
+		</location>
+		<location id="id3" x="51" y="-127">
+			<name x="41" y="-161">Respond</name>
+		</location>
+		<init ref="id1"/>
+		<transition id="id4">
+			<source ref="id3"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="25" y="-80">res_SERV!</label>
+		</transition>
+		<transition id="id5">
+			<source ref="id2"/>
+			<target ref="id3"/>
+		</transition>
+		<transition id="id6">
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-109" y="-80">req_SERV?</label>
+		</transition>
+	</template>
+	<template>
+		<name>TGS</name>
+		<location id="id7" x="42" y="76">
+			<name x="32" y="42">Idle</name>
+		</location>
+		<location id="id8" x="-270" y="-17">
+			<name x="-280" y="-51">SendServerTicket</name>
+		</location>
+		<location id="id9" x="-42" y="-93">
+			<name x="-52" y="-127">ReceiveTicket</name>
+		</location>
+		<init ref="id7"/>
+		<transition id="id10">
+			<source ref="id8"/>
+			<target ref="id7"/>
+			<label kind="synchronisation" x="-252" y="12">res_TGS!</label>
+		</transition>
+		<transition id="id11">
+			<source ref="id9"/>
+			<target ref="id8"/>
+		</transition>
+		<transition id="id12">
+			<source ref="id7"/>
+			<target ref="id9"/>
+			<label kind="synchronisation" x="-25" y="-34">req_TGS?</label>
+		</transition>
+	</template>
+	<template>
+		<name>KDC</name>
+		<location id="id13" x="0" y="0">
+			<name x="-10" y="-34">Idle</name>
+		</location>
+		<location id="id14" x="-161" y="-187">
+			<name x="-171" y="-221">ReceiveRequest</name>
+		</location>
+		<location id="id15" x="110" y="-161">
+			<name x="100" y="-195">SendResponse</name>
+		</location>
+		<init ref="id13"/>
+		<transition id="id16">
+			<source ref="id15"/>
+			<target ref="id13"/>
+			<label kind="synchronisation" x="18" y="-97">res_AS!</label>
+		</transition>
+		<transition id="id17">
+			<source ref="id14"/>
+			<target ref="id15"/>
+		</transition>
+		<transition id="id18">
+			<source ref="id13"/>
+			<target ref="id14"/>
+			<label kind="synchronisation" x="-143" y="-110">req_AS?</label>
+		</transition>
+	</template>
+	<template>
+		<name>Client</name>
+		<location id="id19" x="-246" y="-144">
+			<name x="-256" y="-178">WaitTicket</name>
+		</location>
+		<location id="id20" x="-187" y="-204">
+			<name x="-197" y="-238">idle</name>
+		</location>
+		<location id="id21" x="-59" y="-178">
+			<name x="-69" y="-212">SendRequest</name>
+		</location>
+		<location id="id22" x="-17" y="42">
+			<name x="-27" y="8">GotTicket</name>
+		</location>
+		<location id="id23" x="-374" y="85">
+			<name x="-384" y="51">GotServiceTicket</name>
+		</location>
+		<location id="id24" x="-374" y="-51">
+			<name x="-384" y="-85">WaitServiceTicket</name>
+		</location>
+		<location id="id25" x="-153" y="59">
+			<name x="-163" y="25">SendToTGS</name>
+		</location>
+		<location id="id26" x="-365" y="204">
+			<name x="-375" y="170">SendToServ</name>
+		</location>
+		<location id="id27" x="-204" y="212">
+			<name x="-214" y="178">WaitServResponse</name>
+		</location>
+		<location id="id28" x="8" y="212">
+			<name x="-2" y="178">Granted</name>
+		</location>
+		<init ref="id20"/>
+		<transition id="id29">
+			<source ref="id27"/>
+			<target ref="id28"/>
+			<label kind="synchronisation" x="-136" y="204">res_SERV?</label>
+		</transition>
+		<transition id="id30">
+			<source ref="id26"/>
+			<target ref="id27"/>
+			<label kind="synchronisation" x="-340" y="195">req_SERV!</label>
+		</transition>
+		<transition id="id31">
+			<source ref="id23"/>
+			<target ref="id26"/>
+		</transition>
+		<transition id="id32">
+			<source ref="id24"/>
+			<target ref="id23"/>
+			<label kind="synchronisation" x="-374" y="0">res_TGS?</label>
+		</transition>
+		<transition id="id33">
+			<source ref="id25"/>
+			<target ref="id24"/>
+			<label kind="synchronisation" x="-255" y="8">req_TGS!</label>
+		</transition>
+		<transition id="id34">
+			<source ref="id22"/>
+			<target ref="id25"/>
+		</transition>
+		<transition id="id35">
+			<source ref="id19"/>
+			<target ref="id22"/>
+			<label kind="synchronisation" x="-170" y="-85">res_AS?</label>
+			<label kind="assignment" x="-170" y="-59">clientHasTicket= true</label>
+		</transition>
+		<transition id="id36">
+			<source ref="id21"/>
+			<target ref="id19"/>
+			<label kind="synchronisation" x="-170" y="-178">req_AS!</label>
+		</transition>
+		<transition id="id37">
+			<source ref="id20"/>
+			<target ref="id21"/>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+Client1 = Client();
+KDC1 = KDC();
+TGS1 =TGS();
+Serveur1=Server();
+// List one or more processes to be composed into a system.
+system Client1, KDC1,TGS1,Serveur1;</system>
+	<queries>
+		<query>
+			<formula>E&lt;&gt; Client1.GotTicket</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2025-05-19 14:25:17 +0200">
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; Client1.GotServiceTicket</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2025-05-19 01:36:02 +0200">
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; Client1.Granted</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2025-05-19 14:25:12 +0200">
+			</result>
+		</query>
+	</queries>
+</nta>
