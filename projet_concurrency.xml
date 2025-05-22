@@ -5,7 +5,9 @@
 chan req_AS, res_AS;
 chan req_TGS, res_TGS;
 chan req_SERV,res_SERV;
-bool clientHasTicket = false;</declaration>
+bool clientHasTicket = false;
+bool HasServiceTicket = false;
+</declaration>
 	<template>
 		<name x="5" y="5">Template</name>
 		<declaration>// Place local declarations here.
@@ -145,7 +147,9 @@ bool clientHasTicket = false;</declaration>
 		<transition id="id32">
 			<source ref="id24"/>
 			<target ref="id23"/>
-			<label kind="synchronisation" x="-374" y="0">res_TGS?</label>
+			<label kind="guard" x="-493" y="-17">HasServiceTicket</label>
+			<label kind="synchronisation" x="-408" y="0">res_TGS?</label>
+			<label kind="assignment" x="-484" y="25">HasServiceTicket = true</label>
 		</transition>
 		<transition id="id33">
 			<source ref="id25"/>
@@ -196,6 +200,12 @@ system Client1, KDC1,TGS1,Serveur1;</system>
 			<formula>E&lt;&gt; Client1.Granted</formula>
 			<comment/>
 			<result outcome="success" type="quality" timestamp="2025-05-19 14:25:12 +0200">
+			</result>
+		</query>
+		<query>
+			<formula>A[] Client1.Granted imply HasServiceTicket</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2025-05-22 15:02:47 +0200">
 			</result>
 		</query>
 	</queries>
